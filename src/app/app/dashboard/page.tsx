@@ -5,7 +5,12 @@ import {
   SidebarInset,
   SidebarProvider,
 } from "@/components/ui/sidebar"
+import { Metadata } from "next"
 
+export const metadata:Metadata = {
+  title:"Dashboard",
+  description:"Dashboard"
+}
 
 export default function Page() {
   return (
