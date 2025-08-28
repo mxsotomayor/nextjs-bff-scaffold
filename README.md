@@ -9,12 +9,11 @@ This repo is a basic configuration for Nextjs + Shadcn.
 - Run json-server demo api: ```yarn api```
 - Run Dev Mode: ```yarn dev```
 
-## This project also includes
+## This project also include
 
-- shadcn + tailwind 4
-- Black theme
-- Tanstack Query
-- Tanstack Table
+- Root Dispatcher
+- Login / Secured directory (```/app```)
+- Shadcn + tailwind 4
+- Toggle theme
+- Tanstack Query, Table
 - Zustand
-- API Dispatcher
-- Well directory structure

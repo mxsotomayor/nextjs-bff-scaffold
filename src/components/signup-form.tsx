@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
-import { LoginFormSchema, LoginFormType } from "@/model/schemas";
+import { SignupFormType, SignupFormSchema } from "@/model/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Form,
@@ -21,40 +21,34 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import Link from "next/link";
-import { authenticateUser } from "@/bff/actions/usersActions";
-import { useRouter } from "next/navigation";
+import { registerUser } from "@/bff/actions/usersActions";
 
-export function LoginForm() {
-  const router = useRouter();
-  const form = useForm<LoginFormType>({
-    resolver: zodResolver(LoginFormSchema),
+export function SignupForm() {
+  const form = useForm<SignupFormType>({
+    resolver: zodResolver(SignupFormSchema),
     defaultValues: {
+      name: "",
       username: "",
       password: "",
     },
   });
 
-  async function onSubmit(values: LoginFormType) {
-    try {
-      const fd = new FormData();
-      fd.append("username", values.username);
-      fd.append("password", values.password);
-      await authenticateUser(fd);
-      console.log(values);
-      router.push("/app/dashboard");
-    } catch (error) {
-      console.error("Login failed", error);
+  async function onSubmit(values: SignupFormType) {
+    try{
+      await registerUser(values);
+    }catch(error){
+      console.error("Registration failed", error);
     }
+    console.log(values);
   }
 
   return (
     <div className={cn("flex flex-col gap-6")}>
       <Card>
         <CardHeader>
-          <CardTitle>Login to your account</CardTitle>
+          <CardTitle>Register Account</CardTitle>
           <CardDescription>
-            Enter your email below to login to your account
+            Enter your details below to create your account
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -63,10 +57,23 @@ export function LoginForm() {
               <div className="flex flex-col gap-6">
                 <FormField
                   control={form.control}
+                  name="name"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Name</FormLabel>
+                      <FormControl>
+                        <Input {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
                   name="username"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Username/Email</FormLabel>
+                      <FormLabel>Username</FormLabel>
                       <FormControl>
                         <Input {...field} />
                       </FormControl>
@@ -91,9 +98,6 @@ export function LoginForm() {
                   <Button type="submit" className="w-full">
                     Login
                   </Button>
-                </div>
-                <div className="flex flex-col gap-3">
-                  <Link href="/signup">Register</Link>
                 </div>
               </div>
             </form>
